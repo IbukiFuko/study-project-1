@@ -23,6 +23,13 @@ public class ActorController : MonoBehaviour
 
     [SerializeField] private bool lockPlanar = false;    // «∑ÒÀ¯À¿“∆∂Ø
 
+    public GameObject Model
+    {
+        get
+        {
+            return this.model;
+        }
+    }
 
     void Awake()
     {

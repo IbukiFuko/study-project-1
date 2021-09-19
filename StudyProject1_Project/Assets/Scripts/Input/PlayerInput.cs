@@ -15,11 +15,18 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode keyC;
     [SerializeField] private KeyCode keyD;
 
+    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //视角上下左右
+    [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
+    [SerializeField] private KeyCode keyJLeft = KeyCode.LeftArrow;
+    [SerializeField] private KeyCode keyJRight = KeyCode.RightArrow;
+
     [Header("=====Output Signals=====")]
     [SerializeField] private float dUp = 0;     //directional up
     [SerializeField] private float dRight = 0;
     [SerializeField] private float dMag = 0;    //前进强度
     [SerializeField] private Vector3 dForward = new Vector3(0, 0, 1.0f);  //旋转方向
+    [SerializeField] private float jUp = 0;     //右摇杆，控制相机
+    [SerializeField] private float jRight = 0;
 
     //持续按键
     [SerializeField] private bool isRun = false;    //是否奔跑
@@ -68,6 +75,22 @@ public class PlayerInput : MonoBehaviour
         get
         {
             return this.dForward;
+        }
+    }
+
+    public float JUp
+    {
+        get
+        {
+            return this.jUp;
+        }
+    }
+
+    public float JRight
+    {
+        get
+        {
+            return this.jRight;
         }
     }
 
@@ -140,6 +163,12 @@ public class PlayerInput : MonoBehaviour
             isJump = false;
         }
         lastJump = tmpJump;
+
+        //视角移动
+        //水平面旋转PlayerHandle，俯仰旋转CameraHanle，相机距离修改相机的z轴
+        jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0);
+        jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0);
+
     }
 
     private Vector2 SquareToCircle(Vector2 input)   //将矩形坐标转换为圆形坐标，避免分量超过1
