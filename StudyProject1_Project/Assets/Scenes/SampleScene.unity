@@ -782,6 +782,8 @@ MonoBehaviour:
   jumpVelocity: 5
   rollVelocity: 3
   rollOffset: 5
+  frictionOne: {fileID: 13400000, guid: 392feb0fa42c6eb47a153afae1d6ddee, type: 2}
+  frictionZero: {fileID: 13400000, guid: 0164f8f6de1388d42a7a23981835bc90, type: 2}
   lockPlanar: 0
 --- !u!4 &1533451704
 Transform:

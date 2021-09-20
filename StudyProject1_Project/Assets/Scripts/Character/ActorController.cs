@@ -6,7 +6,10 @@ public class ActorController : MonoBehaviour
 {
     [SerializeField] private GameObject model;
     [SerializeField] private PlayerInput playerInput;
-
+    [SerializeField] private CapsuleCollider col;
+    
+    [Space(10)]
+    [Header("=====Values=====")]
     [SerializeField] private float speed = 2.4f;
     [SerializeField] private float runSpeed = 2.7f;
     [SerializeField] private float rotateTime = 0.3f;
@@ -16,6 +19,12 @@ public class ActorController : MonoBehaviour
     //[SerializeField] private float jabVelocity = 3.0f;    //后跳
     [SerializeField] private float rollOffset = 5.0f;
 
+    [Space(10)]
+    [Header("=====Friction Settings=====")]
+    [SerializeField] private PhysicMaterial frictionOne;
+    [SerializeField] private PhysicMaterial frictionZero;
+
+
     private Animator anim;      //动画控制器
     private Rigidbody rigid;    //刚体
     private Vector3 planarVec;  //位移向量
@@ -24,7 +33,7 @@ public class ActorController : MonoBehaviour
     private bool canJump;       //能否跳跃
     private bool canMove;       //能否位移
 
-    [SerializeField] private bool lockPlanar = false;    //是否锁死移动
+    private bool lockPlanar = false;    //是否锁死移动
 
     public GameObject Model
     {
@@ -50,6 +59,11 @@ public class ActorController : MonoBehaviour
         if (rigid == null)
         {
             Debug.LogError("Rigidbody is missing!");
+        }
+        col = GetComponent<CapsuleCollider>();
+        if(col == null)
+        {
+            Debug.LogError("CapsuleColider is missing!");
         }
     }
 
@@ -118,6 +132,12 @@ public class ActorController : MonoBehaviour
         lockPlanar = false;
         playerInput.InputEnabled = true;
         canAttack = true;
+        col.material = frictionOne;
+    }
+
+    public void OnGroundExit()
+    {
+        col.material = frictionZero;
     }
 
     public void IsGround()
