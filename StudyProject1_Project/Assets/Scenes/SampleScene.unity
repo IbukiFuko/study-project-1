@@ -447,8 +447,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.11822232, y: -0.0029783947, z: 0.00035115812, w: 0.9929826}
+  m_LocalPosition: {x: -0.051514473, y: 1.7073567, z: -2.8208475}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -683,12 +683,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 1533451702}
+  _camera: {fileID: 0}
   horizontalSpeed: 100
   verticalSpeed: 100
   currentEulerX: 20
   verticalMax: 40
   verticalMin: -30
   distance: 2.5
+  cameraSmoothTime: 0.05
 --- !u!1 &1533451700
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,7 +743,7 @@ MonoBehaviour:
   keyRight: 100
   keyA: 304
   keyB: 32
-  keyC: 0
+  keyC: 323
   keyD: 0
   keyJUp: 273
   keyJDown: 274
@@ -755,6 +757,7 @@ MonoBehaviour:
   jRight: 0
   isRun: 0
   isJump: 0
+  isAttack: 0
   dead: 0.001
   smoothTime: 0.1
   inputEnabled: 1

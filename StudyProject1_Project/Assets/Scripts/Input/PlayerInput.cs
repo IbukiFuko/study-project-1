@@ -12,7 +12,7 @@ public class PlayerInput : MonoBehaviour
 
     [SerializeField] private KeyCode keyA = KeyCode.LeftShift;      //跑步
     [SerializeField] private KeyCode keyB = KeyCode.Space;          //跳跃
-    [SerializeField] private KeyCode keyC;
+    [SerializeField] private KeyCode keyC = KeyCode.Mouse0;         //攻击
     [SerializeField] private KeyCode keyD;
 
     [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //视角上下左右
@@ -30,9 +30,13 @@ public class PlayerInput : MonoBehaviour
 
     //持续按键
     [SerializeField] private bool isRun = false;    //是否奔跑
-    //触发按键
-    [SerializeField] private bool isJump = false;     //是否跳跃
+    //单击触发按键
+    [SerializeField] private bool isJump = false;   //是否跳跃
     private bool lastJump = false;
+    [SerializeField] private bool isAttack = false; //是否攻击
+    private bool lastAttack = false;
+    //双击触发按键
+
 
     [Header("=====Others=====")]
     [SerializeField] private float dead = 0.001f;       //死区
@@ -110,6 +114,14 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    public bool IsAttack
+    {
+        get
+        {
+            return this.isAttack;
+        }
+    }
+
     public bool InputEnabled
     {
         get
@@ -149,6 +161,12 @@ public class PlayerInput : MonoBehaviour
         dMag = Mathf.Min(1, Mathf.Sqrt(tmpDAxis.x * tmpDAxis.x + tmpDAxis.y * tmpDAxis.y));
         dForward = dMag > dead ? tmpDAxis.x * transform.right + tmpDAxis.y * transform.forward : dForward; //如果强度小于死区，保持方向不变
 
+
+        //视角移动
+        //水平面旋转PlayerHandle，俯仰旋转CameraHanle，相机距离修改相机的z轴
+        jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0);
+        jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0);
+
         //跑步
         isRun = Input.GetKey(keyA);
 
@@ -164,10 +182,19 @@ public class PlayerInput : MonoBehaviour
         }
         lastJump = tmpJump;
 
-        //视角移动
-        //水平面旋转PlayerHandle，俯仰旋转CameraHanle，相机距离修改相机的z轴
-        jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0);
-        jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0);
+
+        //攻击
+        bool tmpAttack = Input.GetKey(keyC);
+        if (!lastAttack && tmpAttack)    //上一帧没攻击，同时这一帧攻击了
+        {
+            isAttack = true;
+        }
+        else
+        {
+            isAttack = false;
+        }
+        lastAttack = tmpAttack;
+
 
     }
 

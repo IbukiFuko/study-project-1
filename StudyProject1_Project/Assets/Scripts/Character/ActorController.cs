@@ -20,6 +20,9 @@ public class ActorController : MonoBehaviour
     private Rigidbody rigid;    //刚体
     private Vector3 planarVec;  //位移向量
     private Vector3 thrustVec;  //冲量
+    private bool canAttack;     //能否攻击
+    private bool canJump;       //能否跳跃
+    private bool canMove;       //能否位移
 
     [SerializeField] private bool lockPlanar = false;    //是否锁死移动
 
@@ -54,14 +57,23 @@ public class ActorController : MonoBehaviour
     {
         anim.SetFloat("forward", 
             Mathf.Lerp(anim.GetFloat("forward"), (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag, speedupTime));
+
         if(rigid.velocity.magnitude > rollOffset)
         {
             anim.SetTrigger("roll");
         }
 
-        if (playerInput.IsJump)
+        if (playerInput.IsJump && canJump)
         {
             anim.SetTrigger("jump");
+            canAttack = false;
+        }
+
+        if (playerInput.IsAttack && CheckState("ground") && canAttack)
+        {
+            anim.SetTrigger("attack");
+            canJump = false;
+            canMove = false;
         }
 
         model.transform.forward = Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //缓动旋转
@@ -69,7 +81,7 @@ public class ActorController : MonoBehaviour
         if (!lockPlanar)
         {
             //位移
-            planarVec = (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag * model.transform.forward;
+            planarVec = canMove ? (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag * model.transform.forward : Vector3.zero;
         }
     }
 
@@ -80,6 +92,14 @@ public class ActorController : MonoBehaviour
             Mathf.Lerp(rigid.velocity.z, planarVec.z * (playerInput.IsRun ? runSpeed : speed), speedupTime))
             + thrustVec;
         thrustVec = Vector3.zero;
+    }
+
+    //查询动画机状态
+    private bool CheckState(string stateName, string layerName = "Base Layer")
+    {
+        int layerIndex = anim.GetLayerIndex(layerName); //获取索引值
+        bool result = anim.GetCurrentAnimatorStateInfo(layerIndex).IsName(stateName);
+        return result;
     }
 
     /// <summary>
@@ -97,6 +117,7 @@ public class ActorController : MonoBehaviour
     {
         lockPlanar = false;
         playerInput.InputEnabled = true;
+        canAttack = true;
     }
 
     public void IsGround()
@@ -131,5 +152,21 @@ public class ActorController : MonoBehaviour
     public void OnJabUpdate()
     {
         thrustVec = model.transform.forward * anim.GetFloat("jabVelocity");
+    }
+
+    public void OnAttackIdle()
+    {
+        lockPlanar = false;
+        playerInput.InputEnabled = true;
+        canJump = true;
+        canMove = true;
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack"), 0.0f);
+    }
+
+    public void OnAttack1hAEnter()
+    {
+        lockPlanar = true;
+        playerInput.InputEnabled = false;
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack"), 1.0f);
     }
 }
