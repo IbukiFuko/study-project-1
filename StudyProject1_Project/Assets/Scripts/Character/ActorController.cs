@@ -106,9 +106,11 @@ public class ActorController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //动画自带位移
         rigid.position += deltaPos;
         deltaPos = Vector3.zero;
 
+        //程序控制的位移
         rigid.velocity = new Vector3(Mathf.Lerp(rigid.velocity.x, planarVec.x * (playerInput.IsRun ? runSpeed : speed),speedupTime), 
             rigid.velocity.y, 
             Mathf.Lerp(rigid.velocity.z, planarVec.z * (playerInput.IsRun ? runSpeed : speed), speedupTime))
