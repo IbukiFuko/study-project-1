@@ -12,8 +12,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float horizontalSpeed = 100.0f;    //水平旋转速度
     [SerializeField] private float verticalSpeed = 100.0f;      //垂直旋转速度
     [SerializeField] private float currentEulerX = 20.0f;       //当前俯仰角
-    [SerializeField] private float verticalMax = 40.0f;         //俯角上限
-    [SerializeField] private float verticalMin = -30.0f;         //仰角上限
+    [SerializeField] private float verticalMax = 60.0f;         //俯角上限
+    [SerializeField] private float verticalMin = -60.0f;         //仰角上限
     [SerializeField] private float distance = 2.5f;             //相机距离
     [SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
 
@@ -32,14 +32,14 @@ public class CameraController : MonoBehaviour
         _camera = Camera.main.gameObject;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Vector3 tmpModelEuler = model.transform.eulerAngles;
 
         //水平旋转
-        playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.fixedDeltaTime);
+        playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.deltaTime);
         //垂直旋转
-        currentEulerX += playerInput.JUp * -verticalSpeed * Time.fixedDeltaTime;
+        currentEulerX += playerInput.JUp * -verticalSpeed * Time.deltaTime;
         currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
         cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
         //相机距离
@@ -47,7 +47,8 @@ public class CameraController : MonoBehaviour
 
         model.transform.eulerAngles = tmpModelEuler;
 
-        _camera.transform.position = Vector3.SmoothDamp(_camera.transform.position, transform.position, ref cameraDampVelocity, cameraSmoothTime);
+        //_camera.transform.position = Vector3.SmoothDamp(_camera.transform.position, transform.position, ref cameraDampVelocity, cameraSmoothTime);
+        _camera.transform.position = transform.position;
         _camera.transform.eulerAngles = transform.eulerAngles;
     }
 }

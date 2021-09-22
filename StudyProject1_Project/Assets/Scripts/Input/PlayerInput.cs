@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
@@ -136,11 +137,21 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
-        
+        //锁定鼠标
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            EditorApplication.isPaused = true;
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            EditorApplication.isPlaying = false;
+        }
+
         //获取目标值
         targetDup = (Input.GetKey(keyUp) ? 1.0f : 0) - (Input.GetKey(keyDown) ? 1.0f : 0);
         targetDright = (Input.GetKey(keyRight) ? 1.0f : 0) - (Input.GetKey(keyLeft) ? 1.0f : 0);
@@ -164,8 +175,10 @@ public class PlayerInput : MonoBehaviour
 
         //视角移动
         //水平面旋转PlayerHandle，俯仰旋转CameraHanle，相机距离修改相机的z轴
-        jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0);
-        jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0);
+        jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0) +
+            Input.GetAxis("Mouse Y") * 10.0f;
+        jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0) +
+            Input.GetAxis("Mouse X") * 10.0f;
 
         //跑步
         isRun = Input.GetKey(keyA);
