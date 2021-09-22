@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerControl : MonoBehaviour
+public class RootMotionControl : MonoBehaviour
 {
     private Animator anim;
 
@@ -10,9 +10,8 @@ public class TriggerControl : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
-
-    public void ResetTrigger(string triggerName)
+    void OnAnimatorMove()   //重载了Unity自带的对应函数
     {
-        anim.ResetTrigger(triggerName);
+        SendMessageUpwards("OnUpdateRootMotion", (object)anim.deltaPosition);
     }
 }

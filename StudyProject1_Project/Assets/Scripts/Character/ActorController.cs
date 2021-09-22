@@ -36,6 +36,8 @@ public class ActorController : MonoBehaviour
     private float lerpTarget;   //线性插值目标值0||1
     private float lerpTargetStep = 0.1f;    //线性插值间隔
 
+    private Vector3 deltaPos;   //动画自带位移处理
+
     private bool lockPlanar = false;    //是否锁死移动
 
     public GameObject Model
@@ -104,6 +106,9 @@ public class ActorController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        rigid.position += deltaPos;
+        deltaPos = Vector3.zero;
+
         rigid.velocity = new Vector3(Mathf.Lerp(rigid.velocity.x, planarVec.x * (playerInput.IsRun ? runSpeed : speed),speedupTime), 
             rigid.velocity.y, 
             Mathf.Lerp(rigid.velocity.z, planarVec.z * (playerInput.IsRun ? runSpeed : speed), speedupTime))
@@ -219,5 +224,13 @@ public class ActorController : MonoBehaviour
     public void OnAttack1hCUpdate()
     {
         thrustVec = model.transform.forward * anim.GetFloat("attack1hCVelocity");
+    }
+
+    public void OnUpdateRootMotion(object _deltaPos)
+    {
+        //if(CheckState("attack1hC", "attack")) //需要动画自带位移时使用
+        //{
+        //    deltaPos += (Vector3)_deltaPos;
+        //}
     }
 }
