@@ -33,6 +33,11 @@ public class ActorController : MonoBehaviour
     private bool canJump;       //能否跳跃
     private bool canMove;       //能否位移
 
+    private float lerpTarget;   //线性插值目标值0||1
+    private float lerpTargetStep = 0.1f;    //线性插值间隔
+
+    private Vector3 deltaPos;   //动画自带位移处理
+
     private bool lockPlanar = false;    //是否锁死移动
 
     public GameObject Model
@@ -101,6 +106,11 @@ public class ActorController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //动画自带位移
+        rigid.position += deltaPos;
+        deltaPos = Vector3.zero;
+
+        //程序控制的位移
         rigid.velocity = new Vector3(Mathf.Lerp(rigid.velocity.x, planarVec.x * (playerInput.IsRun ? runSpeed : speed),speedupTime), 
             rigid.velocity.y, 
             Mathf.Lerp(rigid.velocity.z, planarVec.z * (playerInput.IsRun ? runSpeed : speed), speedupTime))
@@ -174,19 +184,55 @@ public class ActorController : MonoBehaviour
         thrustVec = model.transform.forward * anim.GetFloat("jabVelocity");
     }
 
-    public void OnAttackIdle()
+    public void OnAttackIdleEnter()
     {
         lockPlanar = false;
         playerInput.InputEnabled = true;
         canJump = true;
         canMove = true;
-        anim.SetLayerWeight(anim.GetLayerIndex("Attack"), 0.0f);
+        lerpTarget = 0;
+    }
+
+    public void OnAttackIdleUpdate()
+    {
+        LerpAttackLayerWeight();
     }
 
     public void OnAttack1hAEnter()
     {
         lockPlanar = true;
         playerInput.InputEnabled = false;
-        anim.SetLayerWeight(anim.GetLayerIndex("Attack"), 1.0f);
+        lerpTarget = 1.0f;
+    }
+
+    public void OnAttack1hAUpdate()
+    {
+        thrustVec = model.transform.forward * anim.GetFloat("attack1hAVelocity");
+        LerpAttackLayerWeight();
+    }
+
+    private void LerpAttackLayerWeight()
+    {
+        float curWeight = anim.GetLayerWeight(anim.GetLayerIndex("Attack"));
+        curWeight = Mathf.Lerp(curWeight, lerpTarget, lerpTargetStep);
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack"), curWeight);
+    }
+
+    public void OnAttack1hBUpdate()
+    {
+        thrustVec = model.transform.forward * anim.GetFloat("attack1hBVelocity");
+    }
+
+    public void OnAttack1hCUpdate()
+    {
+        thrustVec = model.transform.forward * anim.GetFloat("attack1hCVelocity");
+    }
+
+    public void OnUpdateRootMotion(object _deltaPos)
+    {
+        //if(CheckState("attack1hC", "attack")) //需要动画自带位移时使用
+        //{
+        //    deltaPos += (Vector3)_deltaPos;
+        //}
     }
 }
