@@ -35,6 +35,8 @@ public class ActorController : MonoBehaviour
 
     private float lerpTarget;   //线性插值目标值0||1
     private float lerpTargetStep = 0.1f;    //线性插值间隔
+    private float curMoveMulti = 1.0f;   //当前移动倍率
+    private float lerpMoveStep = 0.05f;  //线性插值间隔
 
     private Vector3 deltaPos;   //动画自带位移处理
 
@@ -82,8 +84,9 @@ public class ActorController : MonoBehaviour
 
     void Update()
     {
+        curMoveMulti = Mathf.Lerp(curMoveMulti, playerInput.IsRun ? 2.0f : 1.0f, lerpMoveStep);
         anim.SetFloat("forward", 
-            Mathf.Lerp(anim.GetFloat("forward"), (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag, speedupTime));
+            Mathf.Lerp(anim.GetFloat("forward"), curMoveMulti * playerInput.DMag, speedupTime));
 
         if(rigid.velocity.magnitude > rollOffset)
         {
@@ -108,7 +111,7 @@ public class ActorController : MonoBehaviour
         if (!lockPlanar)
         {
             //位移
-            planarVec = canMove ? (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag * model.transform.forward : Vector3.zero;
+            planarVec = canMove ? curMoveMulti * playerInput.DMag * model.transform.forward : Vector3.zero;
         }
     }
 
@@ -240,7 +243,7 @@ public class ActorController : MonoBehaviour
     {
         //if(CheckState("attack1hC", "attack")) //需要动画自带位移时使用
         //{
-        //    deltaPos += (Vector3)_deltaPos;
+        //    deltaPos += (deltaPos + (Vector3)_deltaPos) / 2.0f;
         //}
     }
 }

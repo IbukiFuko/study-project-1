@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float verticalMax = 60.0f;         //俯角上限
     [SerializeField] private float verticalMin = -60.0f;         //仰角上限
     [SerializeField] private float distance = 2.5f;             //相机距离
-    [SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
+    //[SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
 
     private GameObject playerHandle;    //控制水平旋转
     private GameObject cameraHandle;    //控制俯仰角
@@ -49,6 +49,12 @@ public class CameraController : MonoBehaviour
 
         //_camera.transform.position = Vector3.SmoothDamp(_camera.transform.position, transform.position, ref cameraDampVelocity, cameraSmoothTime);
         _camera.transform.position = transform.position;
-        _camera.transform.eulerAngles = transform.eulerAngles;
+        //_camera.transform.eulerAngles = transform.eulerAngles;
+        _camera.transform.LookAt(cameraHandle.transform);
+    }
+
+    private void FixedUpdate()
+    {
+
     }
 }
