@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [Header("====Player Input====")]
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private IUserInput playerInput;
 
     [Header("====Player Settings====")]
     [SerializeField] private GameObject _camera;                //当前对象相机

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActorController : MonoBehaviour
 {
     [SerializeField] private GameObject model;
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private IUserInput playerInput;
     [SerializeField] private CapsuleCollider col;
     
     [Space(10)]
@@ -55,7 +55,15 @@ public class ActorController : MonoBehaviour
         {
             Debug.LogError("Animator is missing!");
         }
-        playerInput = GetComponent<PlayerInput>();
+        IUserInput[] inputs = GetComponents<IUserInput>();
+        foreach (var input in inputs)
+        {
+            if(input.enabled == true)
+            {
+                playerInput = input;
+                break;
+            }
+        }
         if (playerInput == null)
         {
             Debug.LogError("PlayerInput is missing!");
