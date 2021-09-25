@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActorController : MonoBehaviour
 {
     [SerializeField] private GameObject model;
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private IUserInput playerInput;
     [SerializeField] private CapsuleCollider col;
     
     [Space(10)]
@@ -17,7 +17,7 @@ public class ActorController : MonoBehaviour
     [SerializeField] private float jumpVelocity = 5.0f;
     [SerializeField] private float rollVelocity = 3.0f;
     //[SerializeField] private float jabVelocity = 3.0f;    //后跳
-    [SerializeField] private float rollOffset = 5.0f;
+    [SerializeField] private float rollOffset = 7.0f;       //超过掉落速度则翻滚
 
     [Space(10)]
     [Header("=====Friction Settings=====")]
@@ -35,6 +35,8 @@ public class ActorController : MonoBehaviour
 
     private float lerpTarget;   //线性插值目标值0||1
     private float lerpTargetStep = 0.1f;    //线性插值间隔
+    private float curMoveMulti = 1.0f;   //当前移动倍率
+    private float lerpMoveStep = 0.05f;  //线性插值间隔
 
     private Vector3 deltaPos;   //动画自带位移处理
 
@@ -55,7 +57,15 @@ public class ActorController : MonoBehaviour
         {
             Debug.LogError("Animator is missing!");
         }
-        playerInput = GetComponent<PlayerInput>();
+        IUserInput[] inputs = GetComponents<IUserInput>();
+        foreach (var input in inputs)
+        {
+            if(input.enabled == true)
+            {
+                playerInput = input;
+                break;
+            }
+        }
         if (playerInput == null)
         {
             Debug.LogError("PlayerInput is missing!");
@@ -74,12 +84,16 @@ public class ActorController : MonoBehaviour
 
     void Update()
     {
+        curMoveMulti = Mathf.Lerp(curMoveMulti, playerInput.IsRun ? 2.0f : 1.0f, lerpMoveStep);
         anim.SetFloat("forward", 
-            Mathf.Lerp(anim.GetFloat("forward"), (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag, speedupTime));
+            Mathf.Lerp(anim.GetFloat("forward"), curMoveMulti * playerInput.DMag, speedupTime));
 
-        if(rigid.velocity.magnitude > rollOffset)
+        anim.SetBool("defense", playerInput.IsDefense);
+
+        if(playerInput.IsRoll || rigid.velocity.magnitude > rollOffset)
         {
             anim.SetTrigger("roll");
+            canAttack = false;
         }
 
         if (playerInput.IsJump && canJump)
@@ -100,7 +114,7 @@ public class ActorController : MonoBehaviour
         if (!lockPlanar)
         {
             //位移
-            planarVec = canMove ? (playerInput.IsRun ? 2.0f : 1.0f) * playerInput.DMag * model.transform.forward : Vector3.zero;
+            planarVec = canMove ? curMoveMulti * playerInput.DMag * model.transform.forward : Vector3.zero;
         }
     }
 
@@ -232,7 +246,7 @@ public class ActorController : MonoBehaviour
     {
         //if(CheckState("attack1hC", "attack")) //需要动画自带位移时使用
         //{
-        //    deltaPos += (Vector3)_deltaPos;
+        //    deltaPos += (deltaPos + (Vector3)_deltaPos) / 2.0f;
         //}
     }
 }
