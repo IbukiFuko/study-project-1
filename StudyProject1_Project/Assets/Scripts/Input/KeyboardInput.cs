@@ -14,12 +14,17 @@ public class KeyboardInput : IUserInput
     [SerializeField] private KeyCode keyA = KeyCode.LeftShift;      //跑步
     [SerializeField] private KeyCode keyB = KeyCode.Space;          //跳跃
     [SerializeField] private KeyCode keyC = KeyCode.Mouse0;         //攻击
-    [SerializeField] private KeyCode keyD;
+    [SerializeField] private KeyCode keyD = KeyCode.Mouse1;         //防御
 
     [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //视角上下左右
     [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
     [SerializeField] private KeyCode keyJLeft = KeyCode.LeftArrow;
     [SerializeField] private KeyCode keyJRight = KeyCode.RightArrow;
+
+    [Header("=====Mouse Settings=====")]
+    [SerializeField] private bool mouseEnable = true;
+    [SerializeField] private float mouseSensitivityX = 10.0f;
+    [SerializeField] private float mouseSensitivityY = 10.0f;
 
     void Start()
     {
@@ -62,12 +67,15 @@ public class KeyboardInput : IUserInput
         //视角移动
         //水平面旋转PlayerHandle，俯仰旋转CameraHanle，相机距离修改相机的z轴
         jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0) +
-            Input.GetAxis("Mouse Y") * 10.0f;
+            (mouseEnable ? Input.GetAxis("Mouse Y") * mouseSensitivityY : 0);
         jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0) +
-            Input.GetAxis("Mouse X") * 10.0f;
+            (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
         //跑步
         isRun = Input.GetKey(keyA);
+
+        //防御
+        isDefense = Input.GetKey(keyD);
 
         //跳跃
         bool tmpJump = Input.GetKey(keyB);
