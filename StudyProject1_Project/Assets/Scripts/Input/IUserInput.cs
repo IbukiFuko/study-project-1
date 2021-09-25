@@ -17,9 +17,7 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected bool isDefense = false;//是否防御
     //单击触发按键
     [SerializeField] protected bool isJump = false;   //是否跳跃
-    protected bool lastJump = false;
     [SerializeField] protected bool isAttack = false; //是否攻击
-    protected bool lastAttack = false;
     //双击触发按键
 
 

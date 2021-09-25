@@ -851,6 +851,7 @@ MonoBehaviour:
   jUp: 0
   jRight: 0
   isRun: 0
+  isDefense: 0
   isJump: 0
   isAttack: 0
   dead: 0.001
@@ -860,14 +861,17 @@ MonoBehaviour:
   keyDown: 115
   keyLeft: 97
   keyRight: 100
-  keyA: 304
-  keyB: 32
-  keyC: 323
-  keyD: 0
+  keyRun: 304
+  keyJump: 32
+  keyAttack: 323
+  keyDefense: 324
   keyJUp: 273
   keyJDown: 274
   keyJLeft: 276
   keyJRight: 275
+  mouseEnable: 1
+  mouseSensitivityX: 10
+  mouseSensitivityY: 10
 --- !u!114 &1533451703
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,10 +11,10 @@ public class KeyboardInput : IUserInput
     [SerializeField] private KeyCode keyLeft = KeyCode.A;
     [SerializeField] private KeyCode keyRight = KeyCode.D;
 
-    [SerializeField] private KeyCode keyA = KeyCode.LeftShift;      //跑步
-    [SerializeField] private KeyCode keyB = KeyCode.Space;          //跳跃
-    [SerializeField] private KeyCode keyC = KeyCode.Mouse0;         //攻击
-    [SerializeField] private KeyCode keyD = KeyCode.Mouse1;         //防御
+    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;      //跑步
+    [SerializeField] private KeyCode keyJump = KeyCode.Space;          //跳跃
+    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;         //攻击
+    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;         //防御
 
     [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //视角上下左右
     [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
@@ -26,13 +26,19 @@ public class KeyboardInput : IUserInput
     [SerializeField] private float mouseSensitivityX = 10.0f;
     [SerializeField] private float mouseSensitivityY = 10.0f;
 
-    void Start()
-    {
+    private MyButton btnRun = new MyButton();
+    private MyButton btnJump = new MyButton();
+    private MyButton btnAttack = new MyButton();
+    private MyButton btnDefense = new MyButton();
 
-    }
-    
+
     void Update()
     {
+        btnRun.Tick(Input.GetKey(keyRun));
+        btnJump.Tick(Input.GetKey(keyJump));
+        btnAttack.Tick(Input.GetKey(keyAttack));
+        btnDefense.Tick(Input.GetKey(keyDefense));
+
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             EditorApplication.isPaused = true;
@@ -71,36 +77,16 @@ public class KeyboardInput : IUserInput
             (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
         //跑步
-        isRun = Input.GetKey(keyA);
+        isRun = btnRun.IsPressing;
 
         //防御
-        isDefense = Input.GetKey(keyD);
+        isDefense = btnDefense.IsPressing;
 
         //跳跃
-        bool tmpJump = Input.GetKey(keyB);
-        if(!lastJump && tmpJump)    //上一帧没跳，同时这一帧跳了
-        {
-            isJump = true;
-        }
-        else
-        {
-            isJump = false;
-        }
-        lastJump = tmpJump;
-
+        isJump = btnJump.OnReleased;
 
         //攻击
-        bool tmpAttack = Input.GetKey(keyC);
-        if (!lastAttack && tmpAttack)    //上一帧没攻击，同时这一帧攻击了
-        {
-            isAttack = true;
-        }
-        else
-        {
-            isAttack = false;
-        }
-        lastAttack = tmpAttack;
-
+        isAttack = btnAttack.OnPressed;
 
     }
 
