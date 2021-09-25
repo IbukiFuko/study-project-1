@@ -28,8 +28,7 @@ public class KeyboardInput : IUserInput
 
     void Start()
     {
-        //Ëø¶¨Êó±ê
-        Cursor.lockState = CursorLockMode.Locked;
+
     }
     
     void Update()

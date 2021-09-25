@@ -30,6 +30,10 @@ public class CameraController : MonoBehaviour
         playerHandle = cameraHandle.transform.parent.gameObject;
         model = playerHandle.GetComponent<ActorController>().Model;
         _camera = Camera.main.gameObject;
+
+
+        //Ëø¶¨Êó±ê
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
