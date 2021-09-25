@@ -77,17 +77,19 @@ public class KeyboardInput : IUserInput
             (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
         //跑步
-        isRun = btnRun.IsPressing;
+        isRun = btnRun.IsLongPressing || btnRun.IsExtending;    //长按或者等待连击状态
 
-        //防御
-        isDefense = btnDefense.IsPressing;
+        //翻滚
+        isRoll = btnRun.OnTap;
 
         //跳跃
-        isJump = btnJump.OnReleased;
+        isJump = btnJump.OnPressed;
 
         //攻击
         isAttack = btnAttack.OnPressed;
 
+        //防御
+        isDefense = btnDefense.IsPressing;
     }
 
 }

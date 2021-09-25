@@ -854,6 +854,7 @@ MonoBehaviour:
   isDefense: 0
   isJump: 0
   isAttack: 0
+  isRoll: 0
   dead: 0.001
   smoothTime: 0.1
   inputEnabled: 1
@@ -893,7 +894,7 @@ MonoBehaviour:
   speedupTime: 0.5
   jumpVelocity: 5
   rollVelocity: 3
-  rollOffset: 5
+  rollOffset: 9
   frictionOne: {fileID: 13400000, guid: 392feb0fa42c6eb47a153afae1d6ddee, type: 2}
   frictionZero: {fileID: 13400000, guid: 0164f8f6de1388d42a7a23981835bc90, type: 2}
 --- !u!4 &1533451704

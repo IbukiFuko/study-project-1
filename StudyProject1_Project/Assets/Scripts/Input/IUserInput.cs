@@ -16,8 +16,9 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected bool isRun = false;    //是否奔跑
     [SerializeField] protected bool isDefense = false;//是否防御
     //单击触发按键
-    [SerializeField] protected bool isJump = false;   //是否跳跃
-    [SerializeField] protected bool isAttack = false; //是否攻击
+    [SerializeField] protected bool isJump = false;     //是否跳跃
+    [SerializeField] protected bool isAttack = false;   //是否攻击
+    [SerializeField] protected bool isRoll = false;     //是否翻滚
     //双击触发按键
 
 
@@ -113,6 +114,14 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
         get
         {
             return this.isJump;
+        }
+    }
+
+    public bool IsRoll
+    {
+        get
+        {
+            return this.isRoll;
         }
     }
 

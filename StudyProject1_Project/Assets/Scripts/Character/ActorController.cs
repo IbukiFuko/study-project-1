@@ -17,7 +17,7 @@ public class ActorController : MonoBehaviour
     [SerializeField] private float jumpVelocity = 5.0f;
     [SerializeField] private float rollVelocity = 3.0f;
     //[SerializeField] private float jabVelocity = 3.0f;    //后跳
-    [SerializeField] private float rollOffset = 5.0f;
+    [SerializeField] private float rollOffset = 7.0f;       //超过掉落速度则翻滚
 
     [Space(10)]
     [Header("=====Friction Settings=====")]
@@ -90,9 +90,10 @@ public class ActorController : MonoBehaviour
 
         anim.SetBool("defense", playerInput.IsDefense);
 
-        if(rigid.velocity.magnitude > rollOffset)
+        if(playerInput.IsRoll || rigid.velocity.magnitude > rollOffset)
         {
             anim.SetTrigger("roll");
+            canAttack = false;
         }
 
         if (playerInput.IsJump && canJump)
