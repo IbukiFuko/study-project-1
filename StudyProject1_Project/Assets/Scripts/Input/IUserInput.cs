@@ -11,6 +11,7 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected Vector3 dForward = new Vector3(0, 0, 1.0f);  //旋转方向
     [SerializeField] protected float jUp = 0;     //右摇杆，控制相机
     [SerializeField] protected float jRight = 0;
+    [SerializeField] protected float jDistance = 0; //相机距离
 
     //持续按键
     [SerializeField] protected bool isRun = false;    //是否奔跑
@@ -19,6 +20,7 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected bool isJump = false;     //是否跳跃
     [SerializeField] protected bool isAttack = false;   //是否攻击
     [SerializeField] protected bool isRoll = false;     //是否翻滚
+    [SerializeField] protected bool isLockOn = false;   //是否锁定
     //双击触发按键
 
 
@@ -93,6 +95,14 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
         }
     }
 
+    public float JDistance
+    {
+        get
+        {
+            return this.jDistance;
+        }
+    }
+
     public bool IsRun
     {
         get
@@ -122,6 +132,14 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
         get
         {
             return this.isRoll;
+        }
+    }
+
+    public bool IsLockOn
+    {
+        get
+        {
+            return this.isLockOn;
         }
     }
 

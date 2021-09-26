@@ -11,12 +11,13 @@ public class KeyboardInput : IUserInput
     [SerializeField] private KeyCode keyLeft = KeyCode.A;
     [SerializeField] private KeyCode keyRight = KeyCode.D;
 
-    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;      //跑步
-    [SerializeField] private KeyCode keyJump = KeyCode.Space;          //跳跃
-    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;         //攻击
-    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;         //防御
+    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;        //跑步
+    [SerializeField] private KeyCode keyJump = KeyCode.Space;           //跳跃
+    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;        //攻击
+    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;       //防御
+    [SerializeField] private KeyCode keyLockOn = KeyCode.LeftAlt;       //锁定
 
-    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //视角上下左右
+    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;          //视角上下左右
     [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
     [SerializeField] private KeyCode keyJLeft = KeyCode.LeftArrow;
     [SerializeField] private KeyCode keyJRight = KeyCode.RightArrow;
@@ -30,6 +31,7 @@ public class KeyboardInput : IUserInput
     private MyButton btnJump = new MyButton();
     private MyButton btnAttack = new MyButton();
     private MyButton btnDefense = new MyButton();
+    private MyButton btnLockOn = new MyButton();
 
 
     void Update()
@@ -38,6 +40,7 @@ public class KeyboardInput : IUserInput
         btnJump.Tick(Input.GetKey(keyJump));
         btnAttack.Tick(Input.GetKey(keyAttack));
         btnDefense.Tick(Input.GetKey(keyDefense));
+        btnLockOn.Tick(Input.GetKey(keyLockOn));
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -76,6 +79,9 @@ public class KeyboardInput : IUserInput
         jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0) +
             (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
+        //相机距离
+            jDistance = Input.GetAxis("Mouse ScrollWheel");
+
         //跑步
         isRun = btnRun.IsLongPressing || btnRun.IsExtending;    //长按或者等待连击状态
 
@@ -90,6 +96,9 @@ public class KeyboardInput : IUserInput
 
         //防御
         isDefense = btnDefense.IsPressing;
+
+        //锁定
+        isLockOn = btnLockOn.OnPressed;
     }
 
 }
