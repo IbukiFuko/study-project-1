@@ -76,6 +76,9 @@ public class KeyboardInput : IUserInput
         jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0) +
             (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
+        //相机距离
+            jDistance = Input.GetAxis("Mouse ScrollWheel");
+
         //跑步
         isRun = btnRun.IsLongPressing || btnRun.IsExtending;    //长按或者等待连击状态
 

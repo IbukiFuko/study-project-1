@@ -79,8 +79,8 @@ public class MyButton
 
 
             //Debug.Log(onPressed ? "On Pressed." : "On Released.");
-            if (onDoublePressed || onTriplePressed)
-                Debug.Log(onDoublePressed ? "On Double Pressed." : "On Triple Pressed.");
+            //if (onDoublePressed || onTriplePressed)
+            //    Debug.Log(onDoublePressed ? "On Double Pressed." : "On Triple Pressed.");
         }
 
         //¿ÉÁ¬»÷×´Ì¬

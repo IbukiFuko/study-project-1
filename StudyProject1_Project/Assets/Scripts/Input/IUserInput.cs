@@ -11,6 +11,7 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected Vector3 dForward = new Vector3(0, 0, 1.0f);  //旋转方向
     [SerializeField] protected float jUp = 0;     //右摇杆，控制相机
     [SerializeField] protected float jRight = 0;
+    [SerializeField] protected float jDistance = 0; //相机距离
 
     //持续按键
     [SerializeField] protected bool isRun = false;    //是否奔跑
@@ -90,6 +91,14 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
         get
         {
             return this.jRight;
+        }
+    }
+
+    public float JDistance
+    {
+        get
+        {
+            return this.jDistance;
         }
     }
 

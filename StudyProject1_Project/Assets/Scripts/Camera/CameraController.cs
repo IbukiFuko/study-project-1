@@ -15,6 +15,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float verticalMax = 60.0f;         //俯角上限
     [SerializeField] private float verticalMin = -60.0f;         //仰角上限
     [SerializeField] private float distance = 2.5f;             //相机距离
+    [SerializeField] private float distanceSpeed = 2.0f;        //相机距离灵敏度
+    [SerializeField] private float distanceMax = 5f;
+    [SerializeField] private float distanceMin = 1.0f;
     //[SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
 
     private GameObject playerHandle;    //控制水平旋转
@@ -47,6 +50,8 @@ public class CameraController : MonoBehaviour
         currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
         cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
         //相机距离
+        distance -= playerInput.JDistance * distanceSpeed;
+        distance = Mathf.Clamp(distance, distanceMin, distanceMax);
         transform.localPosition = new Vector3(0, 0, -distance);
 
         model.transform.eulerAngles = tmpModelEuler;
