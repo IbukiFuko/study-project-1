@@ -39,9 +39,10 @@ public class ActorController : MonoBehaviour
     private float curMoveMulti = 1.0f;   //当前移动倍率
     private float lerpMoveStep = 0.05f;  //线性插值间隔
 
-    private Vector3 deltaPos;   //动画自带位移处理
+    private Vector3 animationDeltaPos;   //动画自带位移处理
 
     private bool lockPlanar = false;    //是否锁死移动
+    private bool trackDirection = false;    //是否追踪方向
 
     public GameObject Model
     {
@@ -86,8 +87,17 @@ public class ActorController : MonoBehaviour
     void Update()
     {
         curMoveMulti = Mathf.Lerp(curMoveMulti, playerInput.IsRun ? 2.0f : 1.0f, lerpMoveStep);
+        //Forward
+
         anim.SetFloat("forward", 
+            camcon.LockState ?
+            curMoveMulti * transform.InverseTransformVector(playerInput.DForward).z: 
             Mathf.Lerp(anim.GetFloat("forward"), curMoveMulti * playerInput.DMag, speedupTime));
+        //Right
+        anim.SetFloat("right",
+            camcon.LockState ? 
+            curMoveMulti * transform.InverseTransformVector(playerInput.DForward).x :
+            0);
 
         anim.SetBool("defense", playerInput.IsDefense);
 
@@ -116,20 +126,24 @@ public class ActorController : MonoBehaviour
         }
 
         //旋转模型
-        model.transform.forward = camcon.LockState ? transform.forward : Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //缓动旋转;
+        model.transform.forward = camcon.LockState ? 
+            (trackDirection ? planarVec.normalized : transform.forward) : 
+            Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //缓动旋转;
 
         if (!lockPlanar)
         {
             //位移
-            planarVec = canMove ? curMoveMulti * playerInput.DMag * (camcon.LockState ? playerInput.DForward : model.transform.forward) : Vector3.zero;
+            planarVec = canMove ? 
+                curMoveMulti * playerInput.DMag * (camcon.LockState ? playerInput.DForward : model.transform.forward) : 
+                Vector3.zero;
         }
     }
 
     private void FixedUpdate()
     {
         //动画自带位移
-        rigid.position += deltaPos;
-        deltaPos = Vector3.zero;
+        rigid.position += animationDeltaPos;
+        animationDeltaPos = Vector3.zero;
 
         //程序控制的位移
         rigid.velocity = new Vector3(Mathf.Lerp(rigid.velocity.x, planarVec.x * (playerInput.IsRun ? runSpeed : speed),speedupTime), 
@@ -154,6 +168,7 @@ public class ActorController : MonoBehaviour
     {
         //print("On Jump Enter");
         lockPlanar = true;
+        trackDirection = true;
         thrustVec = new Vector3(0, jumpVelocity, 0);
         playerInput.InputEnabled = false;
     }
@@ -161,6 +176,7 @@ public class ActorController : MonoBehaviour
     public void OnGroundEnter()
     {
         lockPlanar = false;
+        trackDirection = false;
         playerInput.InputEnabled = true;
         canAttack = true;
         col.material = frictionOne;
@@ -190,6 +206,7 @@ public class ActorController : MonoBehaviour
     public void OnRollEnter()
     {
         lockPlanar = true;
+        trackDirection = true;
         thrustVec = new Vector3(0, rollVelocity, 0);
         playerInput.InputEnabled = false;
     }

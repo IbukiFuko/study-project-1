@@ -22,8 +22,9 @@ public class CameraController : MonoBehaviour
     //[SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
 
     [Header("=====Lock On=====")]
-    [SerializeField] private GameObject lockTarget;
+    [SerializeField] private LockTarget lockTarget;
     [SerializeField] private Image lockDot;
+    [SerializeField] private float maxLockDistance = 10.0f;
 
     private GameObject playerHandle;    //控制水平旋转
     private GameObject cameraHandle;    //控制俯仰角
@@ -49,27 +50,33 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if(lockTarget == null)
+        if(lockTarget == null || lockTarget.obj == null)
         {
             Vector3 tmpModelEuler = model.transform.eulerAngles;
 
             //水平旋转
             playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.deltaTime);
+            //垂直旋转
+            currentEulerX += playerInput.JUp * -verticalSpeed * Time.deltaTime;
+            currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
+            cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
 
             model.transform.eulerAngles = tmpModelEuler;
         }
         else
         {
-            Vector3 tmpForward = lockTarget.transform.position - model.transform.position;
+            Vector3 tmpForward = lockTarget.obj.transform.position + new Vector3(0, lockTarget.halfHeight, 0) - model.transform.position;
             tmpForward.y = 0;
             playerHandle.transform.forward = tmpForward;
-            lockDot.transform.position = Camera.main.WorldToScreenPoint(lockTarget.transform.position);
+            lockDot.transform.position = Camera.main.WorldToScreenPoint(lockTarget.obj.transform.position + new Vector3(0, lockTarget.halfHeight, 0));
+            cameraHandle.transform.LookAt(lockTarget.obj.transform);
         }
 
-        //垂直旋转
-        currentEulerX += playerInput.JUp * -verticalSpeed * Time.deltaTime;
-        currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
-        cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
+        if(lockTarget != null && Vector3.Distance(model.transform.position, lockTarget.obj.transform.position) > maxLockDistance)
+        {
+            lockTarget = null;
+            lockDot.enabled = false;
+        }
 
         //相机距离
         distance -= playerInput.JDistance * distanceSpeed;
@@ -97,16 +104,28 @@ public class CameraController : MonoBehaviour
         {
             foreach (var col in cols)
             {
-                if(lockTarget == col.gameObject)
+                if (lockTarget != null && lockTarget.obj == col.gameObject)
                 {
                     lockTarget = null;
                     break;
                 }
-                lockTarget = col.gameObject;
+                lockTarget = new LockTarget(col.gameObject);
                 break;
             }
         }
         lockDot.enabled = lockTarget != null;
+    }
+
+    private class LockTarget
+    {
+        public GameObject obj;
+        public float halfHeight;
+
+        public LockTarget(GameObject _obj)
+        {
+            obj = _obj;
+            halfHeight = obj.GetComponent<Collider>().bounds.extents.y;
+        }
     }
 
     public bool LockState
