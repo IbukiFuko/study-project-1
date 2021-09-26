@@ -20,6 +20,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float distanceMin = 1.0f;
     //[SerializeField] private float cameraSmoothTime = 0.05f;     //相机缓动时间
 
+    [Header("=====Lock On=====")]
+    [SerializeField] private GameObject lockTarget;
+
     private GameObject playerHandle;    //控制水平旋转
     private GameObject cameraHandle;    //控制俯仰角
     private GameObject model;           //模型
@@ -41,20 +44,32 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        Vector3 tmpModelEuler = model.transform.eulerAngles;
+        if(lockTarget == null)
+        {
+            Vector3 tmpModelEuler = model.transform.eulerAngles;
 
-        //水平旋转
-        playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.deltaTime);
+            //水平旋转
+            playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.deltaTime);
+
+            model.transform.eulerAngles = tmpModelEuler;
+        }
+        else
+        {
+            Vector3 tmpForward = lockTarget.transform.position - model.transform.position;
+            tmpForward.y = 0;
+            playerHandle.transform.forward = tmpForward;
+        }
+
         //垂直旋转
         currentEulerX += playerInput.JUp * -verticalSpeed * Time.deltaTime;
         currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
         cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
+
         //相机距离
         distance -= playerInput.JDistance * distanceSpeed;
         distance = Mathf.Clamp(distance, distanceMin, distanceMax);
         transform.localPosition = new Vector3(0, 0, -distance);
 
-        model.transform.eulerAngles = tmpModelEuler;
 
         //_camera.transform.position = Vector3.SmoothDamp(_camera.transform.position, transform.position, ref cameraDampVelocity, cameraSmoothTime);
         _camera.transform.position = transform.position;
@@ -62,8 +77,28 @@ public class CameraController : MonoBehaviour
         _camera.transform.LookAt(cameraHandle.transform);
     }
 
-    private void FixedUpdate()
+    public void LockUnLock()
     {
-
+        Vector3 modelOrigin1 = model.transform.position;
+        Vector3 modelOrigin2 = modelOrigin1 + new Vector3(0, 1, 0);
+        Vector3 boxCenter = modelOrigin2 + model.transform.forward * 5.0f;
+        Collider[] cols = Physics.OverlapBox(boxCenter, new Vector3(0.5f, 0.5f, 5f), model.transform.rotation, LayerMask.GetMask("Enemy"));
+        if(cols.Length == 0)
+        {
+            lockTarget = null;
+        }
+        else
+        {
+            foreach (var col in cols)
+            {
+                if(lockTarget == col.gameObject)
+                {
+                    lockTarget = null;
+                    break;
+                }
+                lockTarget = col.gameObject;
+                break;
+            }
+        }
     }
 }

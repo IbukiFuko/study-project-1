@@ -6,7 +6,8 @@ public class ActorController : MonoBehaviour
 {
     [SerializeField] private GameObject model;
     [SerializeField] private IUserInput playerInput;
-    [SerializeField] private CapsuleCollider col;
+    [SerializeField] private CapsuleCollider col;       //用于改变物理材质
+    [SerializeField] private CameraController camcon;
     
     [Space(10)]
     [Header("=====Values=====")]
@@ -17,7 +18,7 @@ public class ActorController : MonoBehaviour
     [SerializeField] private float jumpVelocity = 5.0f;
     [SerializeField] private float rollVelocity = 3.0f;
     //[SerializeField] private float jabVelocity = 3.0f;    //后跳
-    [SerializeField] private float rollOffset = 7.0f;       //超过掉落速度则翻滚
+    [SerializeField] private float rollOffset = 5.0f;       //超过掉落速度则翻滚
 
     [Space(10)]
     [Header("=====Friction Settings=====")]
@@ -90,7 +91,12 @@ public class ActorController : MonoBehaviour
 
         anim.SetBool("defense", playerInput.IsDefense);
 
-        if(playerInput.IsRoll || rigid.velocity.magnitude > rollOffset)
+        if (playerInput.IsLockOn)
+        {
+            camcon.LockUnLock();
+        }
+
+        if(playerInput.IsRoll || -rigid.velocity.y > rollOffset)
         {
             anim.SetTrigger("roll");
             canAttack = false;

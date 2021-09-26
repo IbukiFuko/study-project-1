@@ -11,12 +11,13 @@ public class KeyboardInput : IUserInput
     [SerializeField] private KeyCode keyLeft = KeyCode.A;
     [SerializeField] private KeyCode keyRight = KeyCode.D;
 
-    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;      //ÅÜ²½
-    [SerializeField] private KeyCode keyJump = KeyCode.Space;          //ÌøÔ¾
-    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;         //¹¥»÷
-    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;         //·ÀÓù
+    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;        //ÅÜ²½
+    [SerializeField] private KeyCode keyJump = KeyCode.Space;           //ÌøÔ¾
+    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;        //¹¥»÷
+    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;       //·ÀÓù
+    [SerializeField] private KeyCode keyLockOn = KeyCode.LeftAlt;       //Ëø¶¨
 
-    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;            //ÊÓ½ÇÉÏÏÂ×óÓÒ
+    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;          //ÊÓ½ÇÉÏÏÂ×óÓÒ
     [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
     [SerializeField] private KeyCode keyJLeft = KeyCode.LeftArrow;
     [SerializeField] private KeyCode keyJRight = KeyCode.RightArrow;
@@ -30,6 +31,7 @@ public class KeyboardInput : IUserInput
     private MyButton btnJump = new MyButton();
     private MyButton btnAttack = new MyButton();
     private MyButton btnDefense = new MyButton();
+    private MyButton btnLockOn = new MyButton();
 
 
     void Update()
@@ -38,6 +40,7 @@ public class KeyboardInput : IUserInput
         btnJump.Tick(Input.GetKey(keyJump));
         btnAttack.Tick(Input.GetKey(keyAttack));
         btnDefense.Tick(Input.GetKey(keyDefense));
+        btnLockOn.Tick(Input.GetKey(keyLockOn));
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -93,6 +96,9 @@ public class KeyboardInput : IUserInput
 
         //·ÀÓù
         isDefense = btnDefense.IsPressing;
+
+        //Ëø¶¨
+        isLockOn = btnLockOn.OnPressed;
     }
 
 }

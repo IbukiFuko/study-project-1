@@ -20,6 +20,7 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
     [SerializeField] protected bool isJump = false;     //是否跳跃
     [SerializeField] protected bool isAttack = false;   //是否攻击
     [SerializeField] protected bool isRoll = false;     //是否翻滚
+    [SerializeField] protected bool isLockOn = false;   //是否锁定
     //双击触发按键
 
 
@@ -131,6 +132,14 @@ public abstract class IUserInput : MonoBehaviour    //抽象类
         get
         {
             return this.isRoll;
+        }
+    }
+
+    public bool IsLockOn
+    {
+        get
+        {
+            return this.isLockOn;
         }
     }
 
