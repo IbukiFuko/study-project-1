@@ -115,12 +115,13 @@ public class ActorController : MonoBehaviour
             canMove = false;
         }
 
-        model.transform.forward = Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //缓动旋转
+        //旋转模型
+        model.transform.forward = camcon.LockState ? transform.forward : Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //缓动旋转;
 
         if (!lockPlanar)
         {
             //位移
-            planarVec = canMove ? curMoveMulti * playerInput.DMag * model.transform.forward : Vector3.zero;
+            planarVec = canMove ? curMoveMulti * playerInput.DMag * (camcon.LockState ? playerInput.DForward : model.transform.forward) : Vector3.zero;
         }
     }
 

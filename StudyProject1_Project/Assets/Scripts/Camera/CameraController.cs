@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class CameraController : MonoBehaviour
 
     [Header("=====Lock On=====")]
     [SerializeField] private GameObject lockTarget;
+    [SerializeField] private Image lockDot;
 
     private GameObject playerHandle;    //控制水平旋转
     private GameObject cameraHandle;    //控制俯仰角
@@ -40,6 +42,9 @@ public class CameraController : MonoBehaviour
 
         //锁定鼠标
         Cursor.lockState = CursorLockMode.Locked;
+
+        //消除锁定图标
+        lockDot.enabled = false;
     }
 
     private void Update()
@@ -58,6 +63,7 @@ public class CameraController : MonoBehaviour
             Vector3 tmpForward = lockTarget.transform.position - model.transform.position;
             tmpForward.y = 0;
             playerHandle.transform.forward = tmpForward;
+            lockDot.transform.position = Camera.main.WorldToScreenPoint(lockTarget.transform.position);
         }
 
         //垂直旋转
@@ -99,6 +105,15 @@ public class CameraController : MonoBehaviour
                 lockTarget = col.gameObject;
                 break;
             }
+        }
+        lockDot.enabled = lockTarget != null;
+    }
+
+    public bool LockState
+    {
+        get
+        {
+            return this.lockTarget != null;
         }
     }
 }
