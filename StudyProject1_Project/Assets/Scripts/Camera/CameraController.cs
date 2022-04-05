@@ -9,42 +9,42 @@ public class CameraController : MonoBehaviour
     [SerializeField] private IUserInput playerInput;
 
     [Header("====Player Settings====")]
-    [SerializeField] private GameObject _camera;                //µ±Ç°¶ÔÏóÏà»ú
-    [SerializeField] private float horizontalSpeed = 100.0f;    //Ë®Æ½Ğı×ªËÙ¶È
-    [SerializeField] private float verticalSpeed = 100.0f;      //´¹Ö±Ğı×ªËÙ¶È
-    [SerializeField] private float currentEulerX = 20.0f;       //µ±Ç°¸©Ñö½Ç
-    [SerializeField] private float verticalMax = 60.0f;         //¸©½ÇÉÏÏŞ
-    [SerializeField] private float verticalMin = -60.0f;         //Ñö½ÇÉÏÏŞ
-    [SerializeField] private float distance = 2.5f;             //Ïà»ú¾àÀë
-    [SerializeField] private float distanceSpeed = 2.0f;        //Ïà»ú¾àÀëÁéÃô¶È
+    [SerializeField] private GameObject _camera;                //å½“å‰å¯¹è±¡ç›¸æœº
+    [SerializeField] private float horizontalSpeed = 100.0f;    //æ°´å¹³æ—‹è½¬é€Ÿåº¦
+    [SerializeField] private float verticalSpeed = 100.0f;      //å‚ç›´æ—‹è½¬é€Ÿåº¦
+    [SerializeField] private float currentEulerX = 20.0f;       //å½“å‰ä¿¯ä»°è§’
+    [SerializeField] private float verticalMax = 60.0f;         //ä¿¯è§’ä¸Šé™
+    [SerializeField] private float verticalMin = -60.0f;         //ä»°è§’ä¸Šé™
+    [SerializeField] private float distance = 2.5f;             //ç›¸æœºè·ç¦»
+    [SerializeField] private float distanceSpeed = 2.0f;        //ç›¸æœºè·ç¦»çµæ•åº¦
     [SerializeField] private float distanceMax = 5f;
     [SerializeField] private float distanceMin = 1.0f;
-    //[SerializeField] private float cameraSmoothTime = 0.05f;     //Ïà»ú»º¶¯Ê±¼ä
+    //[SerializeField] private float cameraSmoothTime = 0.05f;     //ç›¸æœºç¼“åŠ¨æ—¶é—´
 
     [Header("=====Lock On=====")]
     [SerializeField] private LockTarget lockTarget;
     [SerializeField] private Image lockDot;
     [SerializeField] private float maxLockDistance = 10.0f;
 
-    private GameObject playerHandle;    //¿ØÖÆË®Æ½Ğı×ª
-    private GameObject cameraHandle;    //¿ØÖÆ¸©Ñö½Ç
-    private GameObject model;           //Ä£ĞÍ
+    private GameObject playerHandle;    //æ§åˆ¶æ°´å¹³æ—‹è½¬
+    private GameObject cameraHandle;    //æ§åˆ¶ä¿¯ä»°è§’
+    private GameObject model;           //æ¨¡å‹
 
-    private Vector3 cameraDampVelocity; //SmoothDampÖĞ¼äÖµ
+    private Vector3 cameraDampVelocity; //SmoothDampä¸­é—´å€¼
 
     private void Awake()
     {
-        //»ñÈ¡Handle
+        //è·å–Handle
         cameraHandle = transform.parent.gameObject;
         playerHandle = cameraHandle.transform.parent.gameObject;
         model = playerHandle.GetComponent<ActorController>().Model;
         _camera = Camera.main.gameObject;
 
 
-        //Ëø¶¨Êó±ê
+        //é”å®šé¼ æ ‡
         Cursor.lockState = CursorLockMode.Locked;
 
-        //Ïû³ıËø¶¨Í¼±ê
+        //æ¶ˆé™¤é”å®šå›¾æ ‡
         lockDot.enabled = false;
     }
 
@@ -54,9 +54,9 @@ public class CameraController : MonoBehaviour
         {
             Vector3 tmpModelEuler = model.transform.eulerAngles;
 
-            //Ë®Æ½Ğı×ª
+            //æ°´å¹³æ—‹è½¬
             playerHandle.transform.Rotate(Vector3.up, playerInput.JRight * horizontalSpeed * Time.deltaTime);
-            //´¹Ö±Ğı×ª
+            //å‚ç›´æ—‹è½¬
             currentEulerX += playerInput.JUp * -verticalSpeed * Time.deltaTime;
             currentEulerX = Mathf.Clamp(currentEulerX, verticalMin, verticalMax);
             cameraHandle.transform.localEulerAngles = new Vector3(currentEulerX, 0, 0);
@@ -69,7 +69,7 @@ public class CameraController : MonoBehaviour
             tmpForward.y = 0;
             playerHandle.transform.forward = tmpForward;
             lockDot.transform.position = Camera.main.WorldToScreenPoint(lockTarget.obj.transform.position + new Vector3(0, lockTarget.halfHeight, 0));
-            cameraHandle.transform.LookAt(lockTarget.obj.transform);
+            cameraHandle.transform.LookAt(lockTarget.obj.transform.position + new Vector3(0, lockTarget.halfHeight, 0));
         }
 
         if(lockTarget != null && Vector3.Distance(model.transform.position, lockTarget.obj.transform.position) > maxLockDistance)
@@ -78,7 +78,7 @@ public class CameraController : MonoBehaviour
             lockDot.enabled = false;
         }
 
-        //Ïà»ú¾àÀë
+        //ç›¸æœºè·ç¦»
         distance -= playerInput.JDistance * distanceSpeed;
         distance = Mathf.Clamp(distance, distanceMin, distanceMax);
         transform.localPosition = new Vector3(0, 0, -distance);
