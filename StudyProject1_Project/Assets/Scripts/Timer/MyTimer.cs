@@ -13,9 +13,9 @@ public class MyTimer
 
     private STATE state;
 
-    private float duration = 1.0f;  //¼ÆÊ±Ê±³¤
+    private float duration = 1.0f;  //è®¡æ—¶æ—¶é•¿
 
-    private float elapsedTime = 0;  //¾­¹ıµÄÊ±¼ä
+    private float elapsedTime = 0;  //ç»è¿‡çš„æ—¶é—´
 
     public void Tick()
     {

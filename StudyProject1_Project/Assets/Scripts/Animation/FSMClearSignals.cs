@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//×´Ì¬¹ı¶ÉÊ±Çå³ıĞÅºÅ£¬±ÜÃâ¶à´Î´¥·¢
+//çŠ¶æ€è¿‡æ¸¡æ—¶æ¸…é™¤ä¿¡å·ï¼Œé¿å…å¤šæ¬¡è§¦å‘
 public class FSMClearSignals : StateMachineBehaviour
 {
     [SerializeField] private string[] clearAtEnter;

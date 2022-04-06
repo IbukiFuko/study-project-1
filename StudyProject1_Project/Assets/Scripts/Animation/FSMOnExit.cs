@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FSMOnExit : StateMachineBehaviour
 {
-    //消息通讯
+    //娑堟伅閫氳
     [SerializeField] private string[] onExitMessages;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

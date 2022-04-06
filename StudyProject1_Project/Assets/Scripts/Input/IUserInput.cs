@@ -2,40 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class IUserInput : MonoBehaviour    //³éÏóÀà
+public abstract class IUserInput : MonoBehaviour    //æŠ½è±¡ç±»
 {
     [Header("=====Output Signals=====")]
     [SerializeField] protected float dUp = 0;     //directional up
     [SerializeField] protected float dRight = 0;
-    [SerializeField] protected float dMag = 0;    //Ç°½øÇ¿¶È
-    [SerializeField] protected Vector3 dForward = new Vector3(0, 0, 1.0f);  //Ğı×ª·½Ïò
-    [SerializeField] protected float jUp = 0;     //ÓÒÒ¡¸Ë£¬¿ØÖÆÏà»ú
+    [SerializeField] protected float dMag = 0;    //å‰è¿›å¼ºåº¦
+    [SerializeField] protected Vector3 dForward = new Vector3(0, 0, 1.0f);  //æ—‹è½¬æ–¹å‘
+    [SerializeField] protected float jUp = 0;     //å³æ‘‡æ†ï¼Œæ§åˆ¶ç›¸æœº
     [SerializeField] protected float jRight = 0;
-    [SerializeField] protected float jDistance = 0; //Ïà»ú¾àÀë
+    [SerializeField] protected float jDistance = 0; //ç›¸æœºè·ç¦»
 
-    //³ÖĞø°´¼ü
-    [SerializeField] protected bool isRun = false;    //ÊÇ·ñ±¼ÅÜ
-    [SerializeField] protected bool isDefense = false;//ÊÇ·ñ·ÀÓù
-    //µ¥»÷´¥·¢°´¼ü
-    [SerializeField] protected bool isJump = false;     //ÊÇ·ñÌøÔ¾
-    [SerializeField] protected bool isAttack = false;   //ÊÇ·ñ¹¥»÷
-    [SerializeField] protected bool isRoll = false;     //ÊÇ·ñ·­¹ö
-    [SerializeField] protected bool isLockOn = false;   //ÊÇ·ñËø¶¨
-    //Ë«»÷´¥·¢°´¼ü
+    //æŒç»­æŒ‰é”®
+    [SerializeField] protected bool isRun = false;    //æ˜¯å¦å¥”è·‘
+    [SerializeField] protected bool isDefense = false;//æ˜¯å¦é˜²å¾¡
+    //å•å‡»è§¦å‘æŒ‰é”®
+    [SerializeField] protected bool isJump = false;     //æ˜¯å¦è·³è·ƒ
+    [SerializeField] protected bool isAttack = false;   //æ˜¯å¦æ”»å‡»
+    [SerializeField] protected bool isRoll = false;     //æ˜¯å¦ç¿»æ»š
+    [SerializeField] protected bool isLockOn = false;   //æ˜¯å¦é”å®š
+    //åŒå‡»è§¦å‘æŒ‰é”®
 
 
     [Header("=====Others=====")]
-    [SerializeField] protected float dead = 0.001f;       //ËÀÇø
-    [SerializeField] protected float smoothTime = 0.1f;   //»º³åÊ±¼ä
+    [SerializeField] protected float dead = 0.001f;       //æ­»åŒº
+    [SerializeField] protected float smoothTime = 0.1f;   //ç¼“å†²æ—¶é—´
 
-    [SerializeField] protected bool inputEnabled = true;  //¿ª¹ØÊäÈë
+    [SerializeField] protected bool inputEnabled = true;  //å¼€å…³è¾“å…¥
 
-    protected float targetDup;        //Ä¿±ê
+    protected float targetDup;        //ç›®æ ‡
     protected float targetDright;
-    protected float velocityDup;      //ËÙ¶È
+    protected float velocityDup;      //é€Ÿåº¦
     protected float velocityDright;
 
-    protected Vector2 SquareToCircle(Vector2 input)   //½«¾ØĞÎ×ø±ê×ª»»ÎªÔ²ĞÎ×ø±ê£¬±ÜÃâ·ÖÁ¿³¬¹ı1
+    protected Vector2 SquareToCircle(Vector2 input)   //å°†çŸ©å½¢åæ ‡è½¬æ¢ä¸ºåœ†å½¢åæ ‡ï¼Œé¿å…åˆ†é‡è¶…è¿‡1
     {
         Vector2 output = Vector2.zero;
 
@@ -46,7 +46,7 @@ public abstract class IUserInput : MonoBehaviour    //³éÏóÀà
         return output;
     }
 
-    //ÊôĞÔÉùÃ÷
+    //å±æ€§å£°æ˜
     public float DUp
     {
         get

@@ -6,18 +6,18 @@ using UnityEngine;
 public class KeyboardInput : IUserInput
 {
     [Header("=====Key Settings=====")]
-    [SerializeField] private KeyCode keyUp = KeyCode.W;        //Ç°ºó×óÓÒ
+    [SerializeField] private KeyCode keyUp = KeyCode.W;        //å‰åå·¦å³
     [SerializeField] private KeyCode keyDown = KeyCode.S;
     [SerializeField] private KeyCode keyLeft = KeyCode.A;
     [SerializeField] private KeyCode keyRight = KeyCode.D;
 
-    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;        //ÅÜ²½
-    [SerializeField] private KeyCode keyJump = KeyCode.Space;           //ÌøÔ¾
-    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;        //¹¥»÷
-    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;       //·ÀÓù
-    [SerializeField] private KeyCode keyLockOn = KeyCode.LeftAlt;       //Ëø¶¨
+    [SerializeField] private KeyCode keyRun = KeyCode.LeftShift;        //è·‘æ­¥
+    [SerializeField] private KeyCode keyJump = KeyCode.Space;           //è·³è·ƒ
+    [SerializeField] private KeyCode keyAttack = KeyCode.Mouse0;        //æ”»å‡»
+    [SerializeField] private KeyCode keyDefense = KeyCode.Mouse1;       //é˜²å¾¡
+    [SerializeField] private KeyCode keyLockOn = KeyCode.LeftAlt;       //é”å®š
 
-    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;          //ÊÓ½ÇÉÏÏÂ×óÓÒ
+    [SerializeField] private KeyCode keyJUp = KeyCode.UpArrow;          //è§†è§’ä¸Šä¸‹å·¦å³
     [SerializeField] private KeyCode keyJDown = KeyCode.DownArrow;
     [SerializeField] private KeyCode keyJLeft = KeyCode.LeftArrow;
     [SerializeField] private KeyCode keyJRight = KeyCode.RightArrow;
@@ -51,53 +51,53 @@ public class KeyboardInput : IUserInput
             EditorApplication.isPlaying = false;
         }
 
-        //»ñÈ¡Ä¿±êÖµ
+        //è·å–ç›®æ ‡å€¼
         targetDup = (Input.GetKey(keyUp) ? 1.0f : 0) - (Input.GetKey(keyDown) ? 1.0f : 0);
         targetDright = (Input.GetKey(keyRight) ? 1.0f : 0) - (Input.GetKey(keyLeft) ? 1.0f : 0);
 
-        //¹Ø±ÕÊäÈë
+        //å…³é—­è¾“å…¥
         if (!inputEnabled)
         {
             targetDup = 0;
             targetDright = 0;
         }
 
-        //Öµ¼ÆËã
+        //å€¼è®¡ç®—
         dUp = Mathf.SmoothDamp(dUp, targetDup, ref velocityDup, smoothTime);
         dRight = Mathf.SmoothDamp(dRight, targetDright, ref velocityDright, smoothTime);
 
         Vector2 tmpDAxis = SquareToCircle(new Vector2(dRight, dUp));
 
         dMag = Mathf.Min(1, Mathf.Sqrt(tmpDAxis.x * tmpDAxis.x + tmpDAxis.y * tmpDAxis.y));
-        dForward = dMag > dead ? tmpDAxis.x * transform.right + tmpDAxis.y * transform.forward : dForward; //Èç¹ûÇ¿¶ÈĞ¡ÓÚËÀÇø£¬±£³Ö·½Ïò²»±ä
+        dForward = dMag > dead ? tmpDAxis.x * transform.right + tmpDAxis.y * transform.forward : dForward; //å¦‚æœå¼ºåº¦å°äºæ­»åŒºï¼Œä¿æŒæ–¹å‘ä¸å˜
 
 
-        //ÊÓ½ÇÒÆ¶¯
-        //Ë®Æ½ÃæĞı×ªPlayerHandle£¬¸©ÑöĞı×ªCameraHanle£¬Ïà»ú¾àÀëĞŞ¸ÄÏà»úµÄzÖá
+        //è§†è§’ç§»åŠ¨
+        //æ°´å¹³é¢æ—‹è½¬PlayerHandleï¼Œä¿¯ä»°æ—‹è½¬CameraHanleï¼Œç›¸æœºè·ç¦»ä¿®æ”¹ç›¸æœºçš„zè½´
         jUp = (Input.GetKey(keyJUp) ? 1.0f : 0) - (Input.GetKey(keyJDown) ? 1.0f : 0) +
             (mouseEnable ? Input.GetAxis("Mouse Y") * mouseSensitivityY : 0);
         jRight = (Input.GetKey(keyJRight) ? 1.0f : 0) - (Input.GetKey(keyJLeft) ? 1.0f : 0) +
             (mouseEnable ? Input.GetAxis("Mouse X") * mouseSensitivityX : 0);
 
-        //Ïà»ú¾àÀë
+        //ç›¸æœºè·ç¦»
             jDistance = Input.GetAxis("Mouse ScrollWheel");
 
-        //ÅÜ²½
-        isRun = btnRun.IsLongPressing || btnRun.IsExtending;    //³¤°´»òÕßµÈ´ıÁ¬»÷×´Ì¬
+        //è·‘æ­¥
+        isRun = btnRun.IsLongPressing || btnRun.IsExtending;    //é•¿æŒ‰æˆ–è€…ç­‰å¾…è¿å‡»çŠ¶æ€
 
-        //·­¹ö
+        //ç¿»æ»š
         isRoll = btnRun.OnTap;
 
-        //ÌøÔ¾
+        //è·³è·ƒ
         isJump = btnJump.OnPressed;
 
-        //¹¥»÷
+        //æ”»å‡»
         isAttack = btnAttack.OnPressed;
 
-        //·ÀÓù
+        //é˜²å¾¡
         isDefense = btnDefense.IsPressing;
 
-        //Ëø¶¨
+        //é”å®š
         isLockOn = btnLockOn.OnPressed;
     }
 

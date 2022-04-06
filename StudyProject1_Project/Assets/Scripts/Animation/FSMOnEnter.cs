@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FSMOnEnter : StateMachineBehaviour
 {
-    //ÏûÏ¢Í¨Ñ¶
+    //æ¶ˆæ¯é€šè®¯
     [SerializeField] private string[] onEnterMessages;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -12,8 +12,8 @@ public class FSMOnEnter : StateMachineBehaviour
     {
         foreach (var msg in onEnterMessages)
         {
-            //animator.gameObject.SendMessage(msg);           //³¯×Ô¼º´«
-            animator.gameObject.SendMessageUpwards(msg);    //³¯¸¸ÎïÌå´«ĞÅÏ¢
+            //animator.gameObject.SendMessage(msg);           //æœè‡ªå·±ä¼ 
+            animator.gameObject.SendMessageUpwards(msg);    //æœçˆ¶ç‰©ä½“ä¼ ä¿¡æ¯
         }
     }
 

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class OnGroundSensor : MonoBehaviour
 {
-    [SerializeField] private CapsuleCollider capcol;    //½ºÄÒÌå
+    [SerializeField] private CapsuleCollider capcol;    //èƒ¶å›Šä½“
 
     private Vector3 point1;
     private Vector3 point2;
     private float radius;
 
-    [SerializeField] private float offset = 0.3f;    //¾«¶È,±ÜÃâ´íÎóÊ¶±ğÎ´ÂäµØ
+    [SerializeField] private float offset = 0.3f;    //ç²¾åº¦,é¿å…é”™è¯¯è¯†åˆ«æœªè½åœ°
 
     void Awake()
     {
@@ -19,11 +19,11 @@ public class OnGroundSensor : MonoBehaviour
 
     void FixedUpdate()
     {
-        //»ñÈ¡½ºÄÒÌåµÄÉÏÏÂÇòĞÄ
+        //è·å–èƒ¶å›Šä½“çš„ä¸Šä¸‹çƒå¿ƒ
         point1 = transform.position + transform.up * (radius - offset);
         point2 = transform.position + transform.up * capcol.height - transform.up * (radius + offset);
 
-        //»ñÈ¡Åö×²µ½µÄÎïÌå
+        //è·å–ç¢°æ’åˆ°çš„ç‰©ä½“
         Collider[] outputCols = Physics.OverlapCapsule(point1, point2, radius, LayerMask.GetMask("Ground"));
         if (outputCols.Length != 0)
         {

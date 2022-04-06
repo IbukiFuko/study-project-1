@@ -6,7 +6,7 @@ public class ActorController : MonoBehaviour
 {
     [SerializeField] private GameObject model;
     [SerializeField] private IUserInput playerInput;
-    [SerializeField] private CapsuleCollider col;       //ÓÃÓÚ¸Ä±äÎïÀí²ÄÖÊ
+    [SerializeField] private CapsuleCollider col;       //ç”¨äºæ”¹å˜ç‰©ç†æè´¨
     [SerializeField] private CameraController camcon;
     
     [Space(10)]
@@ -17,8 +17,8 @@ public class ActorController : MonoBehaviour
     [SerializeField] private float speedupTime = 0.5f;
     [SerializeField] private float jumpVelocity = 5.0f;
     [SerializeField] private float rollVelocity = 3.0f;
-    //[SerializeField] private float jabVelocity = 3.0f;    //ºóÌø
-    [SerializeField] private float rollOffset = 5.0f;       //³¬¹ıµôÂäËÙ¶ÈÔò·­¹ö
+    //[SerializeField] private float jabVelocity = 3.0f;    //åè·³
+    [SerializeField] private float rollOffset = 5.0f;       //è¶…è¿‡æ‰è½é€Ÿåº¦åˆ™ç¿»æ»š
 
     [Space(10)]
     [Header("=====Friction Settings=====")]
@@ -26,23 +26,23 @@ public class ActorController : MonoBehaviour
     [SerializeField] private PhysicMaterial frictionZero;
 
 
-    private Animator anim;      //¶¯»­¿ØÖÆÆ÷
-    private Rigidbody rigid;    //¸ÕÌå
-    private Vector3 planarVec;  //Î»ÒÆÏòÁ¿
-    private Vector3 thrustVec;  //³åÁ¿
-    private bool canAttack;     //ÄÜ·ñ¹¥»÷
-    private bool canJump;       //ÄÜ·ñÌøÔ¾
-    private bool canMove;       //ÄÜ·ñÎ»ÒÆ
+    private Animator anim;      //åŠ¨ç”»æ§åˆ¶å™¨
+    private Rigidbody rigid;    //åˆšä½“
+    private Vector3 planarVec;  //ä½ç§»å‘é‡
+    private Vector3 thrustVec;  //å†²é‡
+    private bool canAttack;     //èƒ½å¦æ”»å‡»
+    private bool canJump;       //èƒ½å¦è·³è·ƒ
+    private bool canMove;       //èƒ½å¦ä½ç§»
 
-    private float lerpTarget;   //ÏßĞÔ²åÖµÄ¿±êÖµ0||1
-    private float lerpTargetStep = 0.1f;    //ÏßĞÔ²åÖµ¼ä¸ô
-    private float curMoveMulti = 1.0f;   //µ±Ç°ÒÆ¶¯±¶ÂÊ
-    private float lerpMoveStep = 0.05f;  //ÏßĞÔ²åÖµ¼ä¸ô
+    private float lerpTarget;   //çº¿æ€§æ’å€¼ç›®æ ‡å€¼0||1
+    private float lerpTargetStep = 0.1f;    //çº¿æ€§æ’å€¼é—´éš”
+    private float curMoveMulti = 1.0f;   //å½“å‰ç§»åŠ¨å€ç‡
+    private float lerpMoveStep = 0.05f;  //çº¿æ€§æ’å€¼é—´éš”
 
-    private Vector3 animationDeltaPos;   //¶¯»­×Ô´øÎ»ÒÆ´¦Àí
+    private Vector3 animationDeltaPos;   //åŠ¨ç”»è‡ªå¸¦ä½ç§»å¤„ç†
 
-    private bool lockPlanar = false;    //ÊÇ·ñËøËÀÒÆ¶¯
-    private bool trackDirection = false;    //ÊÇ·ñ×·×Ù·½Ïò
+    private bool lockPlanar = false;    //æ˜¯å¦é”æ­»ç§»åŠ¨
+    private bool trackDirection = false;    //æ˜¯å¦è¿½è¸ªæ–¹å‘
 
     public GameObject Model
     {
@@ -125,14 +125,14 @@ public class ActorController : MonoBehaviour
             canMove = false;
         }
 
-        //Ğı×ªÄ£ĞÍ
+        //æ—‹è½¬æ¨¡å‹
         model.transform.forward = camcon.LockState ? 
             (trackDirection ? planarVec.normalized : transform.forward) : 
-            Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //»º¶¯Ğı×ª;
+            Vector3.Slerp(model.transform.forward, playerInput.DForward, rotateTime); //ç¼“åŠ¨æ—‹è½¬;
 
         if (!lockPlanar)
         {
-            //Î»ÒÆ
+            //ä½ç§»
             planarVec = canMove ? 
                 curMoveMulti * playerInput.DMag * (camcon.LockState ? playerInput.DForward : model.transform.forward) : 
                 Vector3.zero;
@@ -141,11 +141,11 @@ public class ActorController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //¶¯»­×Ô´øÎ»ÒÆ
+        //åŠ¨ç”»è‡ªå¸¦ä½ç§»
         rigid.position += animationDeltaPos;
         animationDeltaPos = Vector3.zero;
 
-        //³ÌĞò¿ØÖÆµÄÎ»ÒÆ
+        //ç¨‹åºæ§åˆ¶çš„ä½ç§»
         rigid.velocity = new Vector3(Mathf.Lerp(rigid.velocity.x, planarVec.x * (playerInput.IsRun ? runSpeed : speed),speedupTime), 
             rigid.velocity.y, 
             Mathf.Lerp(rigid.velocity.z, planarVec.z * (playerInput.IsRun ? runSpeed : speed), speedupTime))
@@ -153,10 +153,10 @@ public class ActorController : MonoBehaviour
         thrustVec = Vector3.zero;
     }
 
-    //²éÑ¯¶¯»­»ú×´Ì¬
+    //æŸ¥è¯¢åŠ¨ç”»æœºçŠ¶æ€
     private bool CheckState(string stateName, string layerName = "Base Layer")
     {
-        int layerIndex = anim.GetLayerIndex(layerName); //»ñÈ¡Ë÷ÒıÖµ
+        int layerIndex = anim.GetLayerIndex(layerName); //è·å–ç´¢å¼•å€¼
         bool result = anim.GetCurrentAnimatorStateInfo(layerIndex).IsName(stateName);
         return result;
     }
@@ -268,7 +268,7 @@ public class ActorController : MonoBehaviour
 
     public void OnUpdateRootMotion(object _deltaPos)
     {
-        //if(CheckState("attack1hC", "attack")) //ĞèÒª¶¯»­×Ô´øÎ»ÒÆÊ±Ê¹ÓÃ
+        //if(CheckState("attack1hC", "attack")) //éœ€è¦åŠ¨ç”»è‡ªå¸¦ä½ç§»æ—¶ä½¿ç”¨
         //{
         //    deltaPos += (deltaPos + (Vector3)_deltaPos) / 2.0f;
         //}

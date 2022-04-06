@@ -10,7 +10,7 @@ public class RootMotionControl : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
-    void OnAnimatorMove()   //ÖØÔØÁËUnity×Ô´øµÄ¶ÔÓ¦º¯Êı
+    void OnAnimatorMove()   //é‡è½½äº†Unityè‡ªå¸¦çš„å¯¹åº”å‡½æ•°
     {
         SendMessageUpwards("OnUpdateRootMotion", (object)anim.deltaPosition);
     }

@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class MyButton
 {
-    private bool isPressing = false;        //³ÖĞø°´ÏÂ
-    private bool isLongPressing = false;    //ÊÇ·ñ³¤°´
-    private bool onPressed = false;         //µ¥»÷
-    private bool onDoublePressed = false;   //Ë«»÷
-    private bool onTriplePressed = false;   //Èı»÷
-    private bool onReleased = false;        //Ì§Æğ
-    private bool isExtending = false;       //¿ÉÁ¬»÷×´Ì¬
-    private bool isDelaying = false;        //µÈ´ı³¤°´
-    private bool onTap = false;             //Çá»÷
+    private bool isPressing = false;        //æŒç»­æŒ‰ä¸‹
+    private bool isLongPressing = false;    //æ˜¯å¦é•¿æŒ‰
+    private bool onPressed = false;         //å•å‡»
+    private bool onDoublePressed = false;   //åŒå‡»
+    private bool onTriplePressed = false;   //ä¸‰å‡»
+    private bool onReleased = false;        //æŠ¬èµ·
+    private bool isExtending = false;       //å¯è¿å‡»çŠ¶æ€
+    private bool isDelaying = false;        //ç­‰å¾…é•¿æŒ‰
+    private bool onTap = false;             //è½»å‡»
 
     private bool curState = false;  //false means release
     private bool lastState = false;
 
     private MyTimer extendTimer = new MyTimer();
-    private float extendingDuration = 0.3f;            //¿ÉÁ¬»÷Ê±¼ä
+    private float extendingDuration = 0.3f;            //å¯è¿å‡»æ—¶é—´
 
     private MyTimer delayTimer = new MyTimer();
     private float delayingDuration = 0.3f;
@@ -31,10 +31,10 @@ public class MyButton
         extendTimer.Tick();
         delayTimer.Tick();
 
-        //µ±Ç°×´Ì¬
+        //å½“å‰çŠ¶æ€
         curState = input;
 
-        //ÊÇ·ñ³ÖĞø°´ÏÂ
+        //æ˜¯å¦æŒç»­æŒ‰ä¸‹
         isPressing = curState;
 
 
@@ -46,18 +46,18 @@ public class MyButton
 
         if (curState != lastState)
         {
-            //ÊÇ·ñ°´ÏÂ
+            //æ˜¯å¦æŒ‰ä¸‹
             onPressed = curState;
             if (onPressed)
             {
                 extendTimer.Go(extendingDuration);
                 delayTimer.Go(delayingDuration);
-                //Á¬»÷
+                //è¿å‡»
                 doubleCount++;
                 tripleCount++;
             }
 
-            //ÊÇ·ñÌ§Æğ
+            //æ˜¯å¦æŠ¬èµ·
             onReleased = !curState;
             if (onReleased && delayTimer.IsRun())
             {
@@ -65,7 +65,7 @@ public class MyButton
                 onTap = true;
             }
 
-            //ÊÇ·ñË«¡¢Èı»÷
+            //æ˜¯å¦åŒã€ä¸‰å‡»
             if(doubleCount == 2)
             {
                 onDoublePressed = true;
@@ -83,19 +83,19 @@ public class MyButton
             //    Debug.Log(onDoublePressed ? "On Double Pressed." : "On Triple Pressed.");
         }
 
-        //¿ÉÁ¬»÷×´Ì¬
+        //å¯è¿å‡»çŠ¶æ€
         isExtending = extendTimer.IsRun();
         if (extendTimer.IsFinished())
         {
-            //ÖØÖÃÁ¬»÷
+            //é‡ç½®è¿å‡»
             doubleCount = 0;
             tripleCount = 0;
         }
 
-        //¿É³¤°´×´Ì¬
+        //å¯é•¿æŒ‰çŠ¶æ€
         isDelaying = extendTimer.IsFinished();
 
-        //³¤°´
+        //é•¿æŒ‰
         bool tmp = IsLongPressing;
         isLongPressing = isDelaying && IsPressing;
 
@@ -103,7 +103,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// °´ÏÂ£¨³ÖĞø£©
+    /// æŒ‰ä¸‹ï¼ˆæŒç»­ï¼‰
     /// </summary>
     public bool IsPressing
     {
@@ -114,7 +114,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// ³¤°´
+    /// é•¿æŒ‰
     /// </summary>
     public bool IsLongPressing
     {
@@ -125,7 +125,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// °´ÏÂ
+    /// æŒ‰ä¸‹
     /// </summary>
     public bool OnPressed
     {
@@ -136,7 +136,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// Ë«»÷
+    /// åŒå‡»
     /// </summary>
     public bool OnDoublePressed
     {
@@ -147,7 +147,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// Èı»÷
+    /// ä¸‰å‡»
     /// </summary>
     public bool OnTriplePressed
     {
@@ -158,7 +158,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// Ì§Æğ
+    /// æŠ¬èµ·
     /// </summary>
     public bool OnReleased
     {
@@ -169,7 +169,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// ÊÇ·ñ¿ÉÁ¬»÷
+    /// æ˜¯å¦å¯è¿å‡»
     /// </summary>
     public bool IsExtending
     {
@@ -180,7 +180,7 @@ public class MyButton
     }
 
     /// <summary>
-    /// ÊÇ·ñ¿É³¤°´
+    /// æ˜¯å¦å¯é•¿æŒ‰
     /// </summary>
     public bool IsDelaying
     {
@@ -191,7 +191,7 @@ public class MyButton
     }
     
     /// <summary>
-    /// Çá»÷
+    /// è½»å‡»
     /// </summary>
     public bool OnTap
     {
